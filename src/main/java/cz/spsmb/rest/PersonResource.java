@@ -48,15 +48,11 @@ public class PersonResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response save(Person person) {
-        person.setId(0l);
-        if (person.getName() != null && person.getAge() > 0) {
-            personRepository.persist(person);
-            return Response.ok().entity("ok").build();
-        } else {
+        person.setId(0L);
+        if (person.getName() == null || person.getAge() <= 0) {
             return Response.status(400).entity("Person must have attributes \"name\" and \"age\".").build();
         }
-
+        personRepository.persist(person);
+        return Response.ok().entity("ok").build();
     }
-
-
 }

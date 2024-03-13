@@ -10,12 +10,12 @@ import java.util.List;
 @ApplicationScoped
 public class PersonRepository implements PanacheRepository<Person> {
 
- public List<Person> listByName(String name){
+    public List<Person> listByName(String name) {
 
-     return find("name", name).list();
- }
+        return find("name", name).list();
+    }
 
-    public Person listById(Long id){
+    public Person listById(Long id) {
         return findById(id);
     }
 
