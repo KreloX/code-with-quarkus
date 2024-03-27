@@ -29,6 +29,7 @@ public class Album implements Serializable {
 
     public Album(String name, Author author) {
         this.name = name;
+        this.author = author;
     }
 
     public long getId() {

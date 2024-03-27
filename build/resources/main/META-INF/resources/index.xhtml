@@ -17,7 +17,54 @@
 </h:head>
 <h:body>
     <h:form>
-        <h1>It works :-)</h1>
+
+        <p:accordionPanel>
+            <p:tab title="Add Song">
+                <div class="container text-center" style="width: 50%">
+                    <div class="row-12">
+                        <div class="mb-3">
+                            <p:outputLabel for="@next" value="Name"/>
+                            <p:inputText id="input-name" value="#{songView.songDTO.name}"/>
+                        </div>
+                        <div class="mb-3">
+                            <p:outputLabel for="@next" value="Author"/>
+                            <p:inputText id="input-author" value="#{songView.songDTO.author}"/>
+                        </div>
+                        <div class="mb-3">
+                            <p:outputLabel for="@next" value="Album"/>
+                            <p:inputText id="input-category" value="#{songView.songDTO.album}"/>
+                        </div>
+                        <p:commandButton value="Save" action="#{songView.saveSong}" update="@form"/>
+                    </div>
+                </div>
+            </p:tab>
+        </p:accordionPanel>
+
+        <p:tieredMenu style="width:200px">
+            <p:menuitem value="All" action="#{songView.init}" update="@form" icon="pi pi-list"/>
+            <p:submenu label="Authors" icon="pi pi-play">
+                <c:forEach items="#{songView.authors}" var="author">
+                    <p:menuitem value="#{author.name}" action="#{songView.filterByAuthor(author)}" update="@form"/>
+                    <p:submenu label="#{author.name} Albums">
+                        <c:forEach items="#{songView.albumsByAuthor(author)}" var="album">
+                            <p:menuitem value="#{album.name}" action="#{songView.filterByAlbum(album)}"
+                                        update="@form"/>
+                        </c:forEach>
+                    </p:submenu>
+                </c:forEach>
+            </p:submenu>
+        </p:tieredMenu>
+
+        <div class="row">
+            <c:forEach items="#{songView.songs}" var="song">
+                <div class="col-md-1 border">
+                    <div><h:outputText value="song: #{song.name}"/></div>
+                    <div><h:outputText value="author: #{song.author.name}"/></div>
+                    <div><h:outputText value="album: #{song.album.name}"/></div>
+                </div>
+            </c:forEach>
+        </div>
+
     </h:form>
 </h:body>
 </html>

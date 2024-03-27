@@ -62,21 +62,22 @@ public class SongResource {
         String name = songDTO.getName();
         String authorName = songDTO.getAuthor();
         String albumName = songDTO.getAlbum();
-        if (name == null || authorName == null || albumName == null) {
+        if (name == null || authorName == null || albumName == null || name.isBlank() || authorName.isBlank() || albumName.isBlank()) {
             return Response.status(400).entity("Song must have attributes \"name\", \"author\" and \"album\".").build();
         }
 
-        Song song = new Song(name);
+        Song song = new Song(name.trim());
 
-        Author author = authorRepository.listByName(authorName).orElseGet(() -> {
-            Author newAuthor = new Author(authorName);
+        Author author = authorRepository.listByName(authorName.trim()).orElseGet(() -> {
+            Author newAuthor = new Author(authorName.trim());
             newAuthor.getSongs().add(song);
             authorRepository.persist(newAuthor);
             return newAuthor;
         });
 
-        Album album = albumRepository.listByName(albumName).orElseGet(() -> {
-            Album newAlbum = new Album(albumName, author);
+        String trimmedAlbumName = albumName.trim() + " (" + authorName.trim() + ")";
+        Album album = albumRepository.listByName(trimmedAlbumName.trim()).orElseGet(() -> {
+            Album newAlbum = new Album(trimmedAlbumName.trim(), author);
             newAlbum.getSongs().add(song);
             albumRepository.persist(newAlbum);
             author.getAlbums().add(newAlbum);
